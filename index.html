@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Orchard Rush</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🧺</text></svg>">
+<style>
+:root{--bg:#FFF3C9;--panel:#FFFFFF;--ink:#1B2A2F;--accent:#06A77D;--sky:#BFE9F5;--grass:#8FD694;--muted:#5B6B70;--line:#D9D2B8;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10211F;--panel:#1A3330;--ink:#F4F1E4;--accent:#3DDBA8;--sky:#1E4A55;--grass:#1F5A3A;--muted:#9DB5AE;--line:#2C4A45}}
+:root[data-theme="dark"]{--bg:#10211F;--panel:#1A3330;--ink:#F4F1E4;--accent:#3DDBA8;--sky:#1E4A55;--grass:#1F5A3A;--muted:#9DB5AE;--line:#2C4A45}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;display:flex;flex-direction:column;align-items:center}
+.wrap{width:100%;max-width:480px;height:100%;display:flex;flex-direction:column;padding:10px 10px 6px;gap:8px}
+.scr{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px}
+.hide{display:none!important}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.top h2{margin:0;font-size:22px}
+.chip{background:var(--panel);border-radius:999px;padding:6px 14px;font-weight:700}
+button{font:inherit;font-weight:700;font-size:20px;border:0;border-radius:999px;padding:12px 28px;background:var(--accent);color:#08201A;cursor:pointer}
+button:disabled{opacity:.45;cursor:default}
+button:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+button.sm{font-size:15px;padding:8px 16px}
+button.alt{background:var(--panel);color:var(--ink)}
+.home{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:14px;text-align:center}
+.home h1{margin:0;font-size:46px;line-height:1}
+.home p{margin:0;color:var(--muted)}
+.home button{width:80%}
+.list{overflow:auto;display:flex;flex-direction:column;gap:8px;flex:1}
+.card{display:flex;align-items:center;gap:10px;background:var(--panel);border-radius:14px;padding:10px 12px}
+.gr{flex:1}.gr small{display:block;color:var(--muted);font-size:13px;line-height:1.3}
+.pre{width:90px;height:60px}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;overflow:auto;flex:1;align-content:start}
+.grid button{display:flex;flex-direction:column;align-items:center;padding:8px 0;border-radius:12px;background:var(--panel);color:var(--ink);font-size:18px}
+.grid button i{font-style:normal;font-size:10px;color:#E0A100;min-height:12px}
+.hud{display:flex;align-items:center;gap:8px;background:var(--panel);border-radius:14px;padding:6px 10px;font-weight:700}
+.hud .t{flex:1}
+.prog{height:8px;background:var(--line);border-radius:6px;overflow:hidden}
+.prog div{height:100%;width:0;background:var(--accent)}
+.stage{position:relative;flex:1;min-height:0;border-radius:18px;overflow:hidden;background:linear-gradient(var(--sky) 70%,var(--grass) 70%)}
+canvas#cv{width:100%;height:100%;display:block;touch-action:none}
+.ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;background:rgba(0,0,0,.55);color:#fff;padding:20px}
+.ov h1{margin:0;font-size:32px}.ov p{margin:0;font-size:20px}
+.ovb{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.ad{height:50px;flex:none;border:2px dashed var(--muted);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="scr" id="home">
+ <div class="home">
+  <svg viewBox="0 0 120 120" width="110" height="110" role="img" aria-label="Orchard Rush logo"><rect width="120" height="120" rx="28" fill="#06A77D"/><circle cx="45" cy="48" r="17" fill="#E4572E"/><circle cx="75" cy="46" r="16" fill="#F3A712"/><circle cx="60" cy="34" r="14" fill="#7B4FBF"/><path d="M56 20c8-6 16-4 18 2-8 4-14 3-18-2z" fill="#4CB944"/><path d="M22 62h76l-12 38H34z" fill="#C98B4B"/><path d="M30 74h60M33 86h54M44 62l-6 38M60 62v38M76 62l6 38" stroke="#8A5A2B" stroke-width="3" fill="none"/><rect x="18" y="58" width="84" height="10" rx="5" fill="#8A5A2B"/></svg>
+  <h1>Orchard Rush</h1>
+  <p>Catch the fruits. Dodge the bombs.</p>
+  <div class="chip">⭐ <span class="pv">0</span> points</div>
+  <button id="bPlay">Play Levels</button>
+  <button id="bTasks">Daily Tasks</button>
+  <button id="bShop">Basket Shop</button>
+ </div>
+</div>
+<div class="scr hide" id="levels">
+ <div class="top"><button class="sm alt" data-go="home">Back</button><h2>Levels</h2><span></span></div>
+ <div class="grid" id="grid"></div>
+</div>
+<div class="scr hide" id="tasks">
+ <div class="top"><button class="sm alt" data-go="home">Back</button><h2>Daily Tasks</h2><div class="chip">⭐ <span class="pv">0</span></div></div>
+ <div class="list" id="taskl"></div>
+</div>
+<div class="scr hide" id="shop">
+ <div class="top"><button class="sm alt" data-go="home">Back</button><h2>Basket Shop</h2><div class="chip">⭐ <span class="pv">0</span></div></div>
+ <div class="list" id="shopl"></div>
+</div>
+<div class="scr hide" id="game">
+ <div class="hud"><button class="sm alt" id="bQuit">✕</button><span class="t" id="gt"></span><span id="lv"></span></div>
+ <div class="prog"><div id="pf"></div></div>
+ <div class="stage">
+  <canvas id="cv"></canvas>
+  <div class="ov hide" id="ov"><h1 id="ovt"></h1><p id="ovp"></p><div class="ovb" id="ovb"></div></div>
+ </div>
+ <div class="chip" style="text-align:center" id="pt"></div>
+</div>
+<!-- AD SLOT: put your banner ad code here (AdSense/AdMob) once the game is on your own hosting -->
+<div class="ad">Ad space</div>
+</div>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var S={pts:0,unlocked:1,stars:{},owned:['classic'],eq:'classic',td:'',done:{}};
+try{var j=localStorage.getItem('fc2');if(j)S=Object.assign(S,JSON.parse(j))}catch(e){}
+function save(){try{localStorage.setItem('fc2',JSON.stringify(S))}catch(e){}}
+function today(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
+if(S.td!==today()){S.td=today();S.done={};save()}
+var FR=['🍎','🍊','🍋','🍉','🍇','🍓'];
+var BK={
+classic:{name:'Classic Wicker',price:0,a:'#C98B4B',b:'#8A5A2B',r:'#6B4220',s:'weave'},
+bucket:{name:'Red Bucket',price:100,a:'#E4572E',b:'#A8341A',r:'#7A2412',s:'shine'},
+ocean:{name:'Ocean Blue',price:250,a:'#4FB3E8',b:'#1F6FA8',r:'#14507D',s:'shine'},
+gold:{name:'Golden Basket',price:500,a:'#FFD54A',b:'#C98F00',r:'#8F6400',s:'shine'},
+rainbow:{name:'Rainbow',price:800,a:'#fff',b:'#fff',r:'#444',s:'rainbow'},
+galaxy:{name:'Galaxy',price:1200,a:'#3A2A7A',b:'#120B33',r:'#7B4FBF',s:'stars'}};
+var TASKS=[
+{id:'t1',title:'Fruit Rush',desc:'Catch 35 fruits. Everything falls very fast.',pts:50,cfg:{target:35,speed:300,gap:.5,bomb:.2,ice:.04,heart:.02,zig:.3,comet:.2}},
+{id:'t2',title:'Bomb Alley',desc:'Catch 25 fruits while bombs rain down.',pts:60,cfg:{target:25,speed:240,gap:.45,bomb:.45,ice:.03,heart:.04,zig:.2}},
+{id:'t3',title:'Perfect Run',desc:'Catch 20 fruits. Miss even one and you fail.',pts:70,cfg:{target:20,speed:240,gap:.6,bomb:.15,noMiss:true,zig:.25}},
+{id:'t4',title:'Melon Hunter',desc:'Catch 10 watermelons 🍉. Other fruits do not count.',pts:80,cfg:{target:10,only:'🍉',speed:260,gap:.4,bomb:.2,ice:.06,poison:.05,zig:.4}},
+{id:'t5',title:'Storm Survival',desc:'Survive 45 seconds in the storm.',pts:100,cfg:{time:45,speed:320,gap:.35,bomb:.3,ice:.06,poison:.06,heart:.05,zig:.4,comet:.3}}];
+function rnd(a,b){return a+Math.floor(Math.random()*(b-a+1))}
+function pv(){document.querySelectorAll('.pv').forEach(function(e){e.textContent=S.pts})}
+function show(id){['home','levels','tasks','shop','game'].forEach(function(s){$(s).classList.toggle('hide',s!==id)});pv();
+ if(id==='levels')buildLevels();if(id==='tasks')buildTasks();if(id==='shop')buildShop()}
+document.querySelectorAll('[data-go]').forEach(function(b){b.onclick=function(){show(b.getAttribute('data-go'))}});
+$('bPlay').onclick=function(){show('levels')};$('bTasks').onclick=function(){show('tasks')};$('bShop').onclick=function(){show('shop')};
+
+function levelCfg(n){
+ var e=Math.min(n,20),h=Math.max(0,n-20);
+ return {mode:'level',n:n,title:'Level '+n,target:20+Math.floor(n*.8),speed:110+e*3+h*2.4,gap:Math.max(.38,1.1-n*.007),
+ bomb:Math.min(.38,.04+e*.003+h*.0042),ice:n>=15?Math.min(.08,(n-14)*.004):0,poison:n>=40?Math.min(.06,(n-39)*.002):0,
+ heart:n>=10?.03:0,zig:n>=25?Math.min(.5,(n-24)*.01):0,comet:n>=30?Math.min(.3,(n-29)*.006):0};
+}
+function buildLevels(){var g=$('grid');g.innerHTML='';
+ for(var n=1;n<=100;n++)(function(n){var b=document.createElement('button'),lock=n>S.unlocked,st=S.stars[n]||0;
+  b.disabled=lock;b.innerHTML=(lock?'🔒':n)+'<i>'+(lock?'':'★'.repeat(st)+'☆'.repeat(3-st))+'</i>';
+  b.onclick=function(){startGame(levelCfg(n))};g.appendChild(b)})(n)}
+function buildTasks(){var l=$('taskl');l.innerHTML='';
+ TASKS.forEach(function(t){var d=document.createElement('div');d.className='card';
+  var done=S.done[t.id],g=document.createElement('div');g.className='gr';
+  g.innerHTML='<b>'+t.title+'</b><small>'+t.desc+'</small><small>Reward: ⭐ '+t.pts+' points</small>';
+  var b=document.createElement('button');b.className='sm';b.textContent=done?'Done ✅':'Play';
+  b.onclick=function(){startGame(Object.assign({bomb:0,ice:0,poison:0,heart:0,zig:0,comet:0,mode:'task',title:t.title,task:t},t.cfg))};
+  d.appendChild(g);d.appendChild(b);l.appendChild(d)});
+ var n=document.createElement('small');n.style.color='var(--muted)';n.textContent='Tasks reset every day. Points are earned only from tasks.';l.appendChild(n)}
+function buildShop(){var l=$('shopl');l.innerHTML='';
+ Object.keys(BK).forEach(function(id){var b=BK[id],d=document.createElement('div');d.className='card';
+  var cn=document.createElement('canvas');cn.width=90;cn.height=60;cn.className='pre';drawBasket(cn.getContext('2d'),45,8,b);
+  var g=document.createElement('div');g.className='gr';g.innerHTML='<b>'+b.name+'</b><small>'+(b.price?b.price+' points':'Free')+'</small>';
+  var own=S.owned.indexOf(id)>-1,bt=document.createElement('button');bt.className='sm';
+  bt.textContent=S.eq===id?'Equipped':own?'Equip':'Buy';bt.disabled=S.eq===id||(!own&&S.pts<b.price);
+  bt.onclick=function(){if(!own){if(S.pts<b.price)return;S.pts-=b.price;S.owned.push(id)}S.eq=id;save();pv();buildShop()};
+  d.appendChild(cn);d.appendChild(g);d.appendChild(bt);l.appendChild(d)})}
+function drawBasket(c,x,y,b){
+ c.save();c.beginPath();c.moveTo(x-35,y+6);c.lineTo(x+35,y+6);c.lineTo(x+26,y+42);c.lineTo(x-26,y+42);c.closePath();
+ var g=c.createLinearGradient(0,y,0,y+42);g.addColorStop(0,b.a);g.addColorStop(1,b.b);c.fillStyle=g;c.fill();c.clip();
+ if(b.s==='weave'){c.strokeStyle='rgba(0,0,0,.25)';c.lineWidth=2;for(var i=-40;i<50;i+=10){c.beginPath();c.moveTo(x+i,y+6);c.lineTo(x+i-8,y+42);c.stroke()}
+  for(var k=0;k<4;k++){c.beginPath();c.moveTo(x-40,y+14+k*9);c.lineTo(x+40,y+14+k*9);c.stroke()}}
+ if(b.s==='rainbow'){var cl=['#E4572E','#F3A712','#FFE066','#4CB944','#2E86AB'];for(var m=0;m<5;m++){c.fillStyle=cl[m];c.fillRect(x-40,y+6+m*7.2,80,7.2)}}
+ if(b.s==='stars'){c.fillStyle='#fff';for(var q=0;q<10;q++)c.fillRect(x-30+(q*37%60),y+10+(q*17%28),2,2)}
+ if(b.s==='shine'){c.fillStyle='rgba(255,255,255,.35)';c.fillRect(x-20,y+6,8,36)}
+ c.restore();c.fillStyle=b.r;c.fillRect(x-40,y,80,8)}
+
+var cv=$('cv'),ctx=cv.getContext('2d'),W=0,H=0,bx=0,G=null;
+function resize(){var d=window.devicePixelRatio||1;W=cv.clientWidth;H=cv.clientHeight;if(!W)return;cv.width=W*d;cv.height=H*d;ctx.setTransform(d,0,0,d,0,0);if(!bx)bx=W/2}
+window.addEventListener('resize',resize);
+function setX(e){if(!G||!G.run||G.fz>0)return;var r=cv.getBoundingClientRect(),x=e.clientX-r.left;if(G.rv>0)x=W-x;bx=Math.max(40,Math.min(W-40,x))}
+cv.addEventListener('pointerdown',setX);cv.addEventListener('pointermove',setX);
+function ov(t,p,btns){$('ovt').textContent=t;$('ovp').textContent=p;var b=$('ovb');b.innerHTML='';
+ btns.forEach(function(x){var e=document.createElement('button');e.textContent=x[0];e.onclick=x[1];b.appendChild(e)});$('ov').classList.remove('hide')}
+function hud(){var s='';for(var i=0;i<3;i++)s+=i<G.lives?'❤️':'🤍';$('lv').textContent=s;
+ var c=G.c,p=c.time?Math.min(1,G.el/c.time):G.caught/c.target;
+ $('pt').textContent=c.time?'Survive: '+Math.ceil(Math.max(0,c.time-G.el))+'s':'Fruits: '+G.caught+' / '+c.target;$('pf').style.width=(p*100)+'%'}
+function startGame(c){
+ if(G)G.run=false;show('game');resize();bx=W/2;
+ var g=G={c:c,caught:0,lives:3,items:[],sp:.5,el:0,fz:0,rv:0,fl:0,fc:'',run:true,last:performance.now(),msg:'',mt:0};
+ $('ov').classList.add('hide');$('gt').textContent=c.title;hud();
+ requestAnimationFrame(function(t){tick(g,t)})}
+$('bQuit').onclick=function(){var m=G&&G.c.mode;if(G)G.run=false;show(m==='task'?'tasks':'levels')};
+function counts(c,it){return !c.only||it.e===c.only}
+function spawnItem(g){var c=g.c,r=Math.random(),a=c.bomb,t='f';
+ if(r<a)t='b';else if(r<(a+=c.ice))t='i';else if(r<(a+=c.poison))t='p';else if(r<(a+=c.heart))t='h';
+ var E={b:'💣',i:'🧊',p:'🧪',h:'💖'};
+ var e=t==='f'?(c.only&&Math.random()<.5?c.only:FR[rnd(0,5)]):E[t];
+ var x=30+Math.random()*(W-60),v=c.speed*(.85+Math.random()*.3),cm=false,am=0;
+ if(t==='f'&&Math.random()<c.comet){v*=1.8;cm=true}
+ if(Math.random()<c.zig)am=25+Math.random()*30;
+ g.items.push({t:t,e:e,x:x,x0:x,y:-30,vy:v,cm:cm,am:am,ph:Math.random()*6})}
+function finish(g,win,why){g.run=false;hud();var c=g.c;
+ if(c.mode==='level'){
+  if(win){var n=c.n,st=g.lives;if(st>(S.stars[n]||0))S.stars[n]=st;if(n===S.unlocked&&n<100)S.unlocked=n+1;save();
+   ov('Level '+n+' Complete!','Stars: '+'★'.repeat(st)+'☆'.repeat(3-st),[['Next Level',function(){show('levels')}],['Replay',function(){startGame(c)}]])}
+  else ov('Level Failed',why,[['Retry',function(){startGame(c)}],['Levels',function(){show('levels')}]])
+ }else{
+  if(win){var t=c.task,m;if(!S.done[t.id]){S.done[t.id]=1;S.pts+=t.pts;save();m='+'+t.pts+' points earned!'}else m='Already completed today. No extra points.';
+   ov('Task Complete!',m,[['Back to Tasks',function(){show('tasks')}]])}
+  else ov('Task Failed',why,[['Retry',function(){startGame(c)}],['Tasks',function(){show('tasks')}]])}
+ // INTERSTITIAL AD: show a full-screen ad here every few levels
+}
+function hit(g,it){var c=g.c;
+ if(it.t==='f'){if(counts(c,it)){g.caught++;g.fl=.3;g.fc='6,167,125';if(!c.time&&g.caught>=c.target)finish(g,true)}}
+ else if(it.t==='b'){g.lives--;g.fl=.35;g.fc='215,38,61';if(navigator.vibrate)navigator.vibrate(80);if(g.lives<=0)finish(g,false,'You ran out of lives.')}
+ else if(it.t==='i'){g.fz=1.2;g.msg='Frozen!';g.mt=1.2}
+ else if(it.t==='p'){g.rv=3;g.msg='Controls reversed!';g.mt=3}
+ else if(it.t==='h'){g.lives=Math.min(3,g.lives+1)}}
+function tick(g,t){
+ if(G!==g||!g.run)return;
+ var c=g.c,dt=Math.min(.05,(t-g.last)/1000);g.last=t;g.el+=dt;
+ g.fz=Math.max(0,g.fz-dt);g.rv=Math.max(0,g.rv-dt);g.sp-=dt;
+ if(g.sp<=0){g.sp=c.gap*(.8+Math.random()*.4);spawnItem(g)}
+ ctx.clearRect(0,0,W,H);
+ var by=H*.7-8,ia=g.items;
+ for(var i=ia.length-1;i>=0;i--){
+  var it=ia[i];it.y+=it.vy*dt;
+  it.x=it.am?Math.max(20,Math.min(W-20,it.x0+Math.sin(it.y/45+it.ph)*it.am)):it.x0;
+  if(it.cm){ctx.strokeStyle='rgba(255,255,255,.6)';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(it.x,it.y-18);ctx.lineTo(it.x,it.y-55);ctx.stroke()}
+  ctx.font='34px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#000';ctx.fillText(it.e,it.x,it.y);
+  if(it.y>by-20&&it.y<by+30&&Math.abs(it.x-bx)<46){ia.splice(i,1);hit(g,it);if(!g.run)return;continue}
+  if(it.y>H+30){ia.splice(i,1);if(it.t==='f'&&c.noMiss&&counts(c,it)){finish(g,false,'You missed a fruit.');return}}
+ }
+ drawBasket(ctx,bx,by-8,BK[S.eq]);
+ if(g.fz>0){ctx.fillStyle='rgba(120,200,255,.25)';ctx.fillRect(0,0,W,H)}
+
+ if(g.mt>0){g.mt-=dt;ctx.font='bold 24px sans-serif';ctx.lineWidth=5;ctx.strokeStyle='rgba(0,0,0,.5)';ctx.fillStyle='#fff';ctx.strokeText(g.msg,W/2,H*.2);ctx.fillText(g.msg,W/2,H*.2)}
+ hud();
+ if(c.time&&g.el>=c.time){finish(g,true);return}
+ requestAnimationFrame(function(t){tick(g,t)})}
+show('home');
+})();
+</script>
+</body>
+</html>
